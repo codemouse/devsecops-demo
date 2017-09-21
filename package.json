@@ -1,0 +1,30 @@
+{
+  "name": "devsecops-demo",
+  "organization": "codemouse-github",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sonarqube": "chmod +x ./sonarqube.sh && ./sonarqube.sh",
+    "snyk": "./node_modules/.bin/snyk test",
+    "test": "npm run snyk && npm run whitesource && npm run sonarqube && echo 'everything is fine'",
+    "whitesource": "chmod +x ./whitesource.sh && ./whitesource.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codemouse/devsecops-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codemouse/devsecops-demo/issues"
+  },
+  "homepage": "https://github.com/codemouse/devsecops-demo#readme",
+  "dependencies": {
+    "angular": "1.3.0",
+    "jquery": "1.5.1"
+  },
+  "devDependencies": {
+    "snyk": "^1.40.4"
+  }
+}

@@ -1,0 +1,29 @@
+sudo: required
+language: node_js
+
+addons:
+  sonarcloud:
+    organization: "codemouse-github"
+    token:
+      secure: "wL9s95MgryJA8Ka7FWrtoqABfj1FbOYKhjcCuBInVlg5XpAjNohgmqklqu6kbz0DEnAl8jNLMI+Cj4s4hFTjsJJ6T+4hsDiN22NhUQrWt2DSxb1Ur+r8WSQBdgOzmKV+oxuUa3+ilfqGWmdI7QgGBmmyNMgcvshJTZ17cIzIejgVTdpHkSEdfTW7tsQTkpS1mgBlktVtUlI9v9k8CX2Nr+WVQkbZMvChg5zwYL46EphMvDhQUnY9szrmGKyWo4uJSGb4ve4NS0K/wXCxPgAp6+CdW+wJpHNKVTg+AABIsRCLcyVX74eQjQgoyyNZq+lq01NMez4c1rpY9PY3xnOhrGdticNoQp0OBZmNKUA5UZLhg05nSJjNnUDTHOn/ngzvpzjsoF1BQgfNkmih+u6vgZv0t3gVOF/G/ya9w6qECIr7yeMF1hCAGF2L4aviNEIf2E4Zs/cDSLHvSpBGPQC4J/wYgNl7bND7cRyTrkGmRKMunmGA74DM835Q/C+x9Ay1rZoMPlz1sQocEg1VhyPA79bX16K2T0fqqh8tRzhx2tAFgXHaTf4gmZx6czki39NlJgmyLPARXAoiX6IVUxAn8KQABK/uMd2sE8wSd9mriPQBUZuc2Z217ROVR1wFvuL2aQM1u1JmeZzEcBQnOsn+7PGxyOBnbqNjsBnO5jkaOJY="
+
+notifications:
+  email: false
+
+matrix:
+  include:
+    - node_js: "6"
+
+script:
+  - sonar-scanner
+
+install:
+  - chmod +x './sonarqube.sh'
+  - './sonarqube.sh'
+  - npm install
+
+cache:
+  directories:
+    - node_modules
+    - '$HOME/.sonar/cache'
+
