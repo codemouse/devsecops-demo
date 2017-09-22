@@ -62,7 +62,7 @@ if [ -f package.json ]; then
   echo -e "projectVersion=$packageVersion-$uuid" >> whitesource-fs-agent.config
 fi
 
-java -jar whitesource-fs-agent-1.8.4.jar -d ./
+java -jar whitesource-fs-agent-1.8.7.jar -d ./
 
 productToken=$(
   jq -n --arg orgToken "$WHITESOURCE_API_KEY" '{"orgToken":$orgToken,"requestType":"getAllProducts"}' |
