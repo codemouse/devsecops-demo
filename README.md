@@ -7,3 +7,11 @@ export SNYK_TOKEN='<UUID HERE>'
 export WHITESOURCE_API_KEY='<API KEY HERE>'
 export SONARCLOUD_TOKEN='<TOKEN HERE>'
 ```
+
+To run, execute each command or chain:
+
+```
+npm run snyk
+npm run whitesource
+npm run sonar
+```

@@ -5,9 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sonarqube": "chmod +x ./sonarqube.sh && ./sonarqube.sh",
+    "sonar": "chmod +x ./sonar.sh && ./sonar.sh",
     "snyk": "./node_modules/.bin/snyk test",
-    "test": "npm run snyk && npm run whitesource && npm run sonarqube && echo 'everything is fine'",
     "whitesource": "chmod +x ./whitesource.sh && ./whitesource.sh"
   },
   "repository": {
@@ -25,6 +24,6 @@
     "jquery": "1.5.1"
   },
   "devDependencies": {
-    "snyk": "^1.40.4"
+    "snyk": "^1.41.1"
   }
 }

@@ -18,8 +18,8 @@ script:
   - sonar-scanner
 
 install:
-  - chmod +x './sonarqube.sh'
-  - './sonarqube.sh'
+  - chmod +x './sonar.sh'
+  - './sonar.sh'
   - npm install
 
 cache:
