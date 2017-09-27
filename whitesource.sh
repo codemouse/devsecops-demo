@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+jarVersion="1.8.8"
+api="https://saas.whitesourcesoftware.com/api"
+headers="Content-Type:application/json"
+
 getProjectState()
 {
   projectState=$(
@@ -41,8 +45,6 @@ getUuid()
     echo
 }
 
-api="https://saas.whitesourcesoftware.com/api"
-headers="Content-Type:application/json"
 
 #if node project
 if [ -f package.json ]; then
@@ -52,17 +54,22 @@ if [ -f package.json ]; then
   sed -i '' '/^projectName/d' ./whitesource-fs-agent.config
   sed -i '' '/^projectVersion/d' ./whitesource-fs-agent.config
 
+  uuid=$(getUuid)
   packageName=$(jq -r '.name' package.json)
   packageVersion=$(jq -r '.version' package.json)
-  uuid=$(getUuid)
-  projectName="$packageName - $packageVersion-$uuid"
+  projectVersion="$packageVersion-$uuid"
+  projectName="$packageName - $projectVersion"
+
+  echo -e "apiKey is: $WHITESOURCE_API_KEY"
+  echo -e "projectName is: $projectName"
+  echo -e "projectVersion is: $projectVersion"
 
   echo -e "apiKey=$WHITESOURCE_API_KEY" >> whitesource-fs-agent.config
   echo -e "projectName=$packageName" >> whitesource-fs-agent.config
-  echo -e "projectVersion=$packageVersion-$uuid" >> whitesource-fs-agent.config
+  echo -e "projectVersion=$projectVersion" >> whitesource-fs-agent.config
 fi
 
-java -jar whitesource-fs-agent-1.8.7.jar -d ./
+java -jar "whitesource-fs-agent-$jarVersion.jar" -d ./
 
 productToken=$(
   jq -n --arg orgToken "$WHITESOURCE_API_KEY" '{"orgToken":$orgToken,"requestType":"getAllProducts"}' |
@@ -70,22 +77,32 @@ productToken=$(
   jq -r '.products | .[] | .productToken'
 );
 
+echo "productToken is: $productToken"
+
 projectToken=$(
   jq -n --arg productToken "$productToken" '{"productToken":$productToken,"requestType":"getAllProjects"}' |
   curl -X POST -H $headers -d @- $api |
   jq -r --arg projectName "$projectName" '.projects | .[] | select(.projectName==$projectName) | .projectToken'
 );
 
+echo "projectToken is: $projectToken"
+
+# need call to create product if it doesnt exist
+#productName=
+#productVersion=
+
 COUNTER=0
 while [ $COUNTER -lt 20 ]; do
   getProjectState
-  echo "$projectState"
+  echo "projectState is: $projectState"
 
   inProgress=$(
     echo "$projectState" | jq -r '.inProgress'
   )
 
-  if [ !inProgress ]; then
+  echo "inProgress is: $inProgress"
+
+  if [ "$inProgress" != true ]; then
     break
   fi
   let COUNTER+=1
@@ -108,8 +125,8 @@ then
    exit 0
 elif [ "$vulnsCount" -gt 0 ] ;
 then
-   echo -e "$vulnsCount Whitesource Vulnerabilities found:"
    echo $vulns | jq '.[]'
+   echo -e "$vulnsCount Whitesource Vulnerabilities found"
    exit 1
 else
    echo -e "Whitesource Error"
