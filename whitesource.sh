@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-jarVersion="1.8.8"
+jarVersion="1.8.9"
 api="https://saas.whitesourcesoftware.com/api"
 headers="Content-Type:application/json"
 
