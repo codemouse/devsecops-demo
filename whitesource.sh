@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-jarVersion="1.8.9"
+jarFile="whitesource-fs-agent-18.3.1.jar"
 api="https://saas.whitesourcesoftware.com/api"
 headers="Content-Type:application/json"
 
@@ -45,7 +45,6 @@ getUuid()
     echo
 }
 
-
 #if node project
 if [ -f package.json ]; then
   echo -e "project is node.js"
@@ -69,7 +68,7 @@ if [ -f package.json ]; then
   echo -e "projectVersion=$projectVersion" >> whitesource-fs-agent.config
 fi
 
-java -jar "whitesource-fs-agent-$jarVersion.jar" -d ./
+java -jar "$jarFile" -d ./
 
 productToken=$(
   jq -n --arg orgToken "$WHITESOURCE_API_KEY" '{"orgToken":$orgToken,"requestType":"getAllProducts"}' |
@@ -106,7 +105,7 @@ while [ $COUNTER -lt 20 ]; do
     break
   fi
   let COUNTER+=1
-  sleep 5
+  sleep 3
 done
 
 vulns=$(
@@ -132,5 +131,3 @@ else
    echo -e "Whitesource Error"
    exit 1
 fi
-
-

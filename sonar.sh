@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+jarFile="sonar-scanner-cli-3.1.0.1141.jar"
+hostUrl="https://sonarcloud.io"
+
 #if node project
 if [ -f package.json ]; then
   echo -e "project is node.js"
@@ -34,49 +37,47 @@ real_path () {
   )
 }
 
-script_path="$0"
+scriptPath="$0"
 
-if [ -h "$script_path" ] ; then
+if [ -h "$scriptPath" ] ; then
   # resolve recursively symlinks
-  script_path=$(real_path "$script_path")
+  scriptPath=$(real_path "$scriptPath")
 fi
 
-sonar_scanner_home=$(dirname "$script_path")/..
+sonarScannerHome=$(dirname "$scriptPath")/..
 
 # make it fully qualified
-sonar_scanner_home=$(cd "$sonar_scanner_home" && pwd -P)
+sonarScannerHome=$(cd "$sonarScannerHome" && pwd -P)
 
-jar_file=sonar-scanner-cli-3.0.3.778.jar
-
-# check that sonar_scanner_home has been correctly set
-if [ ! -f "$jar_file" ] ; then
-  echo "File does not exist: $jar_file"
-  echo "'$sonar_scanner_home' does not point to a valid installation directory: $sonar_scanner_home"
+# check that sonarScannerHome has been correctly set
+if [ ! -f "$jarFile" ] ; then
+  echo "File does not exist: $jarFile"
+  echo "'$sonarScannerHome' does not point to a valid installation directory: $sonarScannerHome"
   exit 1
 fi
 
 if [ -n "$JAVA_HOME" ]
 then
-  java_cmd="$JAVA_HOME/bin/java"
+  javaCmd="$JAVA_HOME/bin/java"
 else
-  java_cmd="$(which java)"
+  javaCmd="$(which java)"
 fi
 
-project_home=$(pwd)
+projectHome=$(pwd)
 
-#echo "Info: Using sonar-scanner at $sonar_scanner_home"
-#echo "Info: Using java at $java_cmd"
-#echo "Info: Using classpath $jar_file"
-#echo "Info: Using project $project_home"
+#echo "Info: Using sonar-scanner at $sonarScannerHome"
+#echo "Info: Using java at $javaCmd"
+#echo "Info: Using classpath $jarFile"
+#echo "Info: Using project $projectHome"
 
-exec "$java_cmd" \
+exec "$javaCmd" \
   -Djava.awt.headless=true \
   -Dsonar.projectKey="$projectKey" \
   -Dsonar.sources=src \
-  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.host.url="$hostUrl" \
   -Dsonar.organization="$organization" \
-  -Dsonar.login="$SONARCLOUD_TOKEN" \
-  -classpath  "$jar_file" \
-  -Dscanner.home="$sonar_scanner_home" \
-  -Dproject.home="$project_home" \
+  -Dsonar.login="$SONAR_TOKEN" \
+  -classpath  "$jarFile" \
+  -Dscanner.home="$sonarScannerHome" \
+  -Dproject.home="$projectHome" \
   org.sonarsource.scanner.cli.Main "$@"
