@@ -5,6 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "chmod +x ./postinstall.sh && ./postinstall.sh",
     "sonar": "chmod +x ./sonar.sh && ./sonar.sh",
     "snyk": "./node_modules/.bin/snyk test",
     "whitesource": "chmod +x ./whitesource.sh && ./whitesource.sh"

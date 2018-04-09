@@ -2,4 +2,5 @@
 node_modules
 .scannerwork
 
-package-lock.json
+whitesource-fs-agent-*
+sonar-scanner-cli-*
